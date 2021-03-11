@@ -1,0 +1,1 @@
+CALL ksfpa.mainframe.vjr623_sp();

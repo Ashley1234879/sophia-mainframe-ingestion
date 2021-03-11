@@ -1,0 +1,57 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Sophia ECR Repository for Inventory airflow
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+Resources:
+  SophiaInventoryRepository:
+    Type: 'AWS::ECR::Repository'
+    Properties:
+      RepositoryName: sophia/sophia-mainframe-ingestion
+      RepositoryPolicyText:
+        Version: 2008-10-17
+        Statement:
+          - Sid: CurrentAccountPush
+            Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action:
+              - 'ecr:GetDownloadUrlForLayer'
+              - 'ecr:PutImage'
+              - 'ecr:InitiateLayerUpload'
+              - 'ecr:UploadLayerPart'
+              - 'ecr:CompleteLayerUpload'
+          - Sid: AllowPull
+            Effect: Allow
+            Principal:
+              AWS:
+                - 'arn:aws:iam::978148700146:root'
+                - 'arn:aws:iam::379835347476:root'
+                - 'arn:aws:iam::697242035344:root'
+                - 'arn:aws:iam::187628286232:root'
+                - 'arn:aws:iam::318263296841:root'
+                - 'arn:aws:iam::563000599290:root'
+                - 'arn:aws:iam::847029211010:root'
+            Action:
+              - 'ecr:GetDownloadUrlForLayer'
+              - 'ecr:BatchGetImage'
+              - 'ecr:BatchCheckLayerAvailability'
+Outputs:
+  SophiaInventoryRepositoryURL:
+    Description: Full path to latest image for inventory etl
+    Value: !Join
+      - .
+      - - !Ref 'AWS::AccountId'
+        - dkr.ecr
+        - !Ref 'AWS::Region'
+        - !Join
+          - /
+          - - amazonaws.com
+            - !Join
+              - ':'
+              - - !Ref SophiaInventoryRepository
+                - latest
+    Export:
+      Name: !Sub '${AWS::StackName}::SophiaInventoryRepositoryURL'

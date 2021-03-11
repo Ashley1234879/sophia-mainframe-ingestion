@@ -1,0 +1,1 @@
+call ksfpa.mr2.df_udt_skuprojstatic_sp();

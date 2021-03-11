@@ -1,0 +1,8 @@
+---
+
+project_id: sophia
+tags:
+  Billing: 'sophia'
+  Project: 'sophia'
+  Owner: 'sophia'
+  Environment: '{{ cfn_environment }}'

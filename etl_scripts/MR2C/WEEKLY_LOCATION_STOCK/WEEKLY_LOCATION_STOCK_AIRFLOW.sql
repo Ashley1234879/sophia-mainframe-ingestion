@@ -1,0 +1,1 @@
+call ksfda.mr2c.WEEKLY_LOCATION_STOCK_SP();
